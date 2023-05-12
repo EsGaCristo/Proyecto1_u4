@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "194092432593",
+    "project_id": "dam-u4-autos-ittepic",
+    "storage_bucket": "dam-u4-autos-ittepic.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:194092432593:android:aeb98a55a377c9438dd9f0",
+        "android_client_info": {
+          "package_name": "mx.edu.ittepic.dam_u4_proyecto1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "194092432593-d2k2rp33q1imvci69v4vca4lb2p5a6uc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFyf_jcAq9YoZ8SEIJ4NOpqepe5ZdnZVM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "194092432593-d2k2rp33q1imvci69v4vca4lb2p5a6uc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "194092432593-qhgrqar3b8arepflim37pc08nj9t5tdm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "mx.edu.ittepic.damU4Proyecto1"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
