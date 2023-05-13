@@ -59,20 +59,41 @@ Future<int> deleteVehiculo(String uid) async {
 /*** Obtencion de bitacoras ***/
 Future<List> getBitacoraVehiculos(String uid) async {
   List bitacoras = [];
-  DocumentSnapshot vehiculoBitacoraSnapshot = await db.collection('vehiculo').doc(uid).get();
-  Map<String,dynamic>? vehiculoBitacora = vehiculoBitacoraSnapshot.data() as Map<String,dynamic>?;
-  if(vehiculoBitacora != null && vehiculoBitacora.containsKey('Bitacora')){
-    bitacoras = List<Map<String,dynamic>>.from(vehiculoBitacora['Bitacora']);
+  try{
+    DocumentSnapshot vehiculoBitacoraSnapshot = await db.collection('vehiculo').doc(uid).get();
+    Map<String,dynamic>? vehiculoBitacora = vehiculoBitacoraSnapshot.data() as Map<String,dynamic>?;
+    if(vehiculoBitacora != null && vehiculoBitacora.containsKey('Bitacora')){
+      bitacoras = List<Map<String,dynamic>>.from(vehiculoBitacora['Bitacora'].values);
+    }
+  }catch(e){
+    print(e);
   }
+
   await Future.delayed(const Duration(seconds: 1));
   return bitacoras;
 }
+
 /*** Agregar Bitacoras ***/
-Future<int> addBitacora(String uid,Bitacora bitacora) async {
+Future<int> addBitacora(String uid, Bitacora bitacora) async {
+  String idB = bitacora.idbitacora;
   try {
-    await db.collection("vehiculo").doc(uid).update({
-      'Bitacora':FieldValue.arrayUnion([bitacora.toMap()]),
-    });
+    var vehiculoRef = db.collection("vehiculo").doc(uid);
+    var vehiculoDoc = await vehiculoRef.get();
+    if (!vehiculoDoc.exists) {
+      // Si el documento del vehículo no existe, crear uno nuevo
+      await vehiculoRef.set({
+        'Bitacora': {
+          idB: bitacora.toMap(),
+        },
+      });
+    } else {
+      // Si el documento del vehículo existe, actualizar la matriz 'Bitacoras'
+      var bitacoras = vehiculoDoc.data()?['Bitacora'] ?? {};
+      bitacoras[idB] = bitacora.toMap();
+      await vehiculoRef.update({
+        'Bitacora': bitacoras,
+      });
+    }
     return 1; // se realizó la inserción exitosamente
   } catch (e) {
     print('Error al agregar bitacora: $e');
@@ -80,17 +101,16 @@ Future<int> addBitacora(String uid,Bitacora bitacora) async {
   }
 }
 
+
+
+
 /*** Actualizar vahiculos ***/
 
 Future<int> updateBitacora(String uid,Bitacora bitacora) async {
   try {
-    await db.collection('vehiculo').doc(uid).set({
-      'Bitacora':FieldValue.arrayRemove([
-        bitacora.toMap()
-      ].cast<Map<String,dynamic>>())
-    });
-    await db.collection("vehiculo").doc(uid).set({
-      'Bitacora':FieldValue.arrayUnion([bitacora.toMap()])
+
+    await db.collection("vehiculo").doc(uid).update({
+      'Bitacora.${bitacora.idbitacora}':bitacora.toMap()
     });
     return 1;
   } catch (e) {
